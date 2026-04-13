@@ -1,5 +1,33 @@
 # Hackintosh i7-4790K + RX 550 (Lexa)
 
+> [!WARNING]
+> ## ⚠️ TRABAJO EN PROGRESO — Sesión pausada el 2026-04-13
+>
+> **Estado actual:** macOS Tahoe 26.4.1 arranca y es usable, pero **sin aceleración Metal/GPU** (rendering por software).
+>
+> ### Problema pendiente: AMD RX 550 (Lexa 699F) sin aceleración gráfica
+> - El spoof a Baffin (67FF) está aplicado correctamente en `DeviceProperties`.
+> - La ruta PCI detectada es correcta: `PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)`.
+> - WhateverGreen.kext está activo (no puede quitarse — sin imagen al arranque).
+> - OCLP 2.4.1 dice "No patches required" porque con SMBIOS `iMac18,3` (iMac con GPU Polaris real), no detecta necesidad de parchear.
+> - La aceleración gráfica Metal no está activa (verificar con `system_profiler SPDisplaysDataType | grep Metal`).
+>
+> ### Próximos pasos a investigar
+> 1. Ejecutar `system_profiler SPDisplaysDataType | grep -E "Vendor|Device|Metal|Chipset|Model"` para confirmar si Metal está activo.
+> 2. Revisar si `AMDRadeonX4000.kext` (driver Polaris) existe en el sistema o fue eliminado en Tahoe/Sequoia.
+> 3. Si el driver no existe en el sistema, OCLP es la única solución — investigar por qué no lo ofrece con `iMac18,3`.
+> 4. Alternativa: probar SMBIOS `MacPro7,1` o `iMac19,1` para ver si OCLP detecta diferente.
+>
+> ### Estado de la EFI actual
+> - SMBIOS: `iMac18,3`
+> - boot-args: `-v keepsyms=1 debug=0x100 alcid=1 -radcodec -no_compat_check revpatch=sbvmm -amfipassbeta agdpmod=pikera`
+> - AMFIPass.kext v1.4.1 incluido y activo
+> - WhateverGreen.kext activo
+> - `amfi=0x80` eliminado (era la causa de inestabilidad previa)
+> - **Internet (Ethernet RealTek) funciona** ✅
+> - **Audio funciona** ✅
+> - **GPU: detectada pero SIN Metal** ⚠️
+
 Bienvenido a este repositorio. Este proyecto documenta y contiene la configuración (carpeta EFI) para instalar macOS (Vanilla OpenCore) en una PC de escritorio basada en arquitectura Intel Haswell y gráficos AMD Polaris/Lexa.
 
 ## Objetivo

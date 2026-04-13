@@ -482,6 +482,24 @@
 				<key>PlistPath</key>
 				<string>Contents/Info.plist</string>
 			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>x86_64</string>
+				<key>BundlePath</key>
+				<string>AMFIPass.kext</string>
+				<key>Comment</key>
+				<string>Permite OCLP Root Patches sin destruir la estabilidad y TCC</string>
+				<key>Enabled</key>
+				<true/>
+				<key>ExecutablePath</key>
+				<string>Contents/MacOS/AMFIPass</string>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>MinKernel</key>
+				<string>23.0.0</string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
 		</array>
 		<key>Block</key>
 		<array>
@@ -1282,7 +1300,7 @@
 				Rg==
 				</data>
 				<key>boot-args</key>
-				<string>-v keepsyms=1 debug=0x100 alcid=1 -radcodec -no_compat_check revpatch=sbvmm amfi=0x80</string>
+				<string>-v keepsyms=1 debug=0x100 alcid=1 -radcodec -no_compat_check revpatch=sbvmm -amfipassbeta agdpmod=pikera</string>
 				<key>csr-active-config</key>
 				<data>
 				AwgAAA==
@@ -1355,7 +1373,7 @@
 			<key>AdviseFeatures</key>
 			<false/>
 			<key>MLB</key>
-			<string>C02914300CDJG36CB</string>
+			<string>C02738303CDJ0UXJA</string>
 			<key>MaxBIOSVersion</key>
 			<false/>
 			<key>ProcessorType</key>
@@ -1369,11 +1387,11 @@
 			<key>SystemMemoryStatus</key>
 			<string>Auto</string>
 			<key>SystemProductName</key>
-			<string>iMacPro1,1</string>
+			<string>iMac18,3</string>
 			<key>SystemSerialNumber</key>
-			<string>C02YJQZCHX87</string>
+			<string>C02VF0JCH7JY</string>
 			<key>SystemUUID</key>
-			<string>DDC679AA-E22B-4031-B8D2-1C79D37456E2</string>
+			<string>4419DC05-72CD-4CA6-A30D-D1FCDF24F448</string>
 		</dict>
 		<key>UpdateDataHub</key>
 		<true/>

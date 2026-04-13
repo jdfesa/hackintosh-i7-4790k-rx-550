@@ -36,5 +36,12 @@ Para eliminar el mensaje de "Este Mac no es compatible", aplicamos medidas para 
 *A modo de recordatorio para la fase del instalador:* 
 - Para que la unidad SSD interna aparezca correctamente en el instalador y se pueda proceder a su uso, se estableció que debe estar obligatoriamente formateada como **Mac OS Extended (Journaled)** o preferiblemente **APFS**, utilizando un mapa de particiones **GUID (GPT)**.
 
+### 5. Inestabilidad y Falta de Aceleración Gráfica (Transparencias)
+Un problema común al instalar macOS Tahoe/Sequoia con tarjetas AMD antiguas (Polaris/Baffin como la RX 550) es que el sistema arranca pero es extremadamente inestable y carece de aceleración Metal (sin transparencias). Esto se debe a dos errores frecuentes:
+
+- **Error en OpenCore Legacy Patcher (OCLP):** Muchos usuarios buscan forzar el parche buscando la tarjeta en `Settings -> Advanced -> Graphics Override`. **Esta opción está diseñada ÚNICAMENTE para tarjetas MXM en iMacs antiguos**, no para Hackintosh. En un Hackintosh, OCLP detecta automáticamente el Spoof de la GPU si está bien configurado en el `config.plist`. Para aplicar el parche de AMD Polaris, simplemente se debe ir al menú principal de OCLP y hacer clic en **"Post-Install Root Patch"**.
+- **Inestabilidad por AMFI (`amfi=0x80`):** Tener `amfi=0x80` en los `boot-args` desactiva completamente el sistema de integridad (Apple Mobile File Integrity). En macOS Tahoe/Sequoia, esto **rompe el sistema de permisos (TCC), causa crasheos constantes de aplicaciones y vuelve el WindowServer inestable**. 
+  - *Solución:* Se debe **eliminar** `amfi=0x80` de los `boot-args`, y en su lugar, instalar el kext `AMFIPass.kext` (v1.4.1 o superior) añadiendo el argumento `-amfipassbeta` si se requiere, permitiendo así que OCLP funcione sin destruir la estabilidad del OS.
+
 ---
 *Documentación generada para facilitar futuras instalaciones y mantenimientos del equipo en macOS Tahoe.*

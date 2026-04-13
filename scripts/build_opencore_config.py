@@ -30,6 +30,8 @@ config['Kernel']['Add'] = [
     {'Arch': 'x86_64', 'BundlePath': 'SMCProcessor.kext', 'Comment': 'Sensor Temp CPU', 'Enabled': True, 'ExecutablePath': 'Contents/MacOS/SMCProcessor', 'MaxKernel': '', 'MinKernel': '', 'PlistPath': 'Contents/Info.plist'},
     {'Arch': 'x86_64', 'BundlePath': 'SMCSuperIO.kext', 'Comment': 'Sensor Fans', 'Enabled': True, 'ExecutablePath': 'Contents/MacOS/SMCSuperIO', 'MaxKernel': '', 'MinKernel': '', 'PlistPath': 'Contents/Info.plist'},
     {'Arch': 'x86_64', 'BundlePath': 'RealtekRTL8111.kext', 'Comment': 'Red Ethernet', 'Enabled': True, 'ExecutablePath': 'Contents/MacOS/RealtekRTL8111', 'MaxKernel': '', 'MinKernel': '', 'PlistPath': 'Contents/Info.plist'},
+    {'Arch': 'x86_64', 'BundlePath': 'RestrictEvents.kext', 'Comment': 'Bypasea chequeo de compatibilidad del instalador', 'Enabled': True, 'ExecutablePath': 'Contents/MacOS/RestrictEvents', 'MaxKernel': '', 'MinKernel': '', 'PlistPath': 'Contents/Info.plist'},
+    {'Arch': 'x86_64', 'BundlePath': 'AMFIPass.kext', 'Comment': 'Permite OCLP Root Patches sin destruir la estabilidad y TCC', 'Enabled': True, 'ExecutablePath': 'Contents/MacOS/AMFIPass', 'MaxKernel': '', 'MinKernel': '23.0.0', 'PlistPath': 'Contents/Info.plist'},
 ]
 
 # 4. Quirks del Kernel (Haswell)
@@ -59,15 +61,14 @@ config['Misc']['Security']['Vault'] = 'Optional'
 # 7. NVRAM (Argumentos de arranque)
 nvram_guid = '7C436110-AB2A-4BBB-A880-FE41995C9F82'
 if nvram_guid in config['NVRAM']['Add']:
-    config['NVRAM']['Add'][nvram_guid]['boot-args'] = '-v keepsyms=1 debug=0x100 alcid=1'
+    config['NVRAM']['Add'][nvram_guid]['boot-args'] = '-v keepsyms=1 debug=0x100 alcid=1 -radcodec -no_compat_check revpatch=sbvmm -amfipassbeta'
     # alcid=1 es para inyectar AppleALC estandar y revpatch es por si usa algo más
     config['NVRAM']['Add'][nvram_guid]['prev-lang:kbd'] = 'es:87'
 
 # 8. PlatformInfo (SMBIOS)
-# Usaremos iMacPro1,1 en lugar de iMac15,1 para permitir instalaciones nativas 
-# de macOS Ventura, Sonoma y Sequoia, desactivando el soporte nativo a la iGPU de Haswell
-# y dándole el control absoluto del video a la RX 550 para aceleración nativa.
-config['PlatformInfo']['Generic']['SystemProductName'] = 'iMacPro1,1'
+# Usaremos iMac18,3 (o iMac17,1) para forzar a OCLP a reconocer la máquina como parcheable.
+# OCLP bloquea el parcheo de gráficas Polaris en iMacPro1,1 porque asume que es una Mac nativa e inmodificable.
+config['PlatformInfo']['Generic']['SystemProductName'] = 'iMac18,3'
 
 # 9. UEFI Drivers
 config['UEFI']['Drivers'] = [
