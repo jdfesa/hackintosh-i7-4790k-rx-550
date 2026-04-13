@@ -45,6 +45,8 @@ sudo "/Applications/Install macOS Tahoe 26.4.1_25E253.app/Contents/Resources/cre
 *(Nota: "Install macOS Tahoe..." es meramente un ejemplo del nombre de la App bajada de MIST, el nombre puede variar según la versión).*
 Se solicita la contraseña del usuario (la cual no mostrará asteriscos por seguridad) y se debe confirmar con la tecla `Y`. El proceso tardará dependiendo de las velocidades de escritura del puerto y la llave.
 
+![Proceso de escritura finalizado en la Terminal](./images/createinstallmedia_success.png)
+
 ## 4. Inyección de la Carpeta EFI (El "Cerebro" del Hackintosh)
 Un instalador base de Apple jamas booteará en hardware ensamblado por piezas (Intel/AMD). La magia de hacer funcionar el sistema la provee la partición secundaria:
 
