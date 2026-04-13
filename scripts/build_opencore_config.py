@@ -64,7 +64,10 @@ if nvram_guid in config['NVRAM']['Add']:
     config['NVRAM']['Add'][nvram_guid]['prev-lang:kbd'] = 'es:87'
 
 # 8. PlatformInfo (SMBIOS)
-config['PlatformInfo']['Generic']['SystemProductName'] = 'iMac15,1'
+# Usaremos iMacPro1,1 en lugar de iMac15,1 para permitir instalaciones nativas 
+# de macOS Ventura, Sonoma y Sequoia, desactivando el soporte nativo a la iGPU de Haswell
+# y dándole el control absoluto del video a la RX 550 para aceleración nativa.
+config['PlatformInfo']['Generic']['SystemProductName'] = 'iMacPro1,1'
 
 # 9. UEFI Drivers
 config['UEFI']['Drivers'] = [

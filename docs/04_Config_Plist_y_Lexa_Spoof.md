@@ -5,7 +5,7 @@ Para asegurar su correcto funcionamiento, hemos creado y ejecutado un script en 
 
 ## Datos Clave Configurados:
 
-1.  **PlatformInfo / SMBIOS:** Hemos firmado la máquina virtualmente como una `iMac15,1`. Este es el modelo oficial de Apple que utilizó el mismo procesador Intel Core i7-4790K que tienes, lo cual asegura el mejor perfil de energía.
+1.  **PlatformInfo / SMBIOS:** Hemos firmado la máquina virtualmente como un `iMacPro1,1` en lugar de un `iMac15,1`. Esto es un **movimiento estratégico vital**: macOS recientes (Ventura, Sonoma, Sequoia) rechazan arrancar en un iMac15. Al decirle que es un iMacPro1,1, el sistema arranca sin rechistar, desactiva la inestable gráfica integrada (iGPU) del procesador Haswell, y le otorga el 100% del procesamiento de video a la tarjeta externa RX 550, logrando una aceleración nativa.
 2.  **NVRAM y Boot Arguments:** Se inyectaron `-v keepsyms=1 debug=0x100 alcid=1`
     *   `-v`: Verbose. Mostrará las letras en pantalla como en Linux al iniciar, esencial para investigar si hay errores.
     *   `alcid=1`: Identificador nativo inyectado para que `AppleALC.kext` logre encender el audio High Definition de la placa B85.
