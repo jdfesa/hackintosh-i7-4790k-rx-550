@@ -21,6 +21,8 @@ El comando oficial de Apple (`createinstallmedia`) está programado a bajo nivel
    - **Formato:** `Mac OS Extended (Journaled)`
    - **Esquema:** `Mapa de particiones GUID` (GUID Partition Map).  *<- ¡Crítico! Esto genera la partición oculta "EFI" donde introduciremos OpenCore.*
 
+![Opciones de formateo obligatorias en Utilidad de Discos](./images/disk_utility_format.png)
+
 ## 2. Flasheo Oficial por Terminal
 Con el disco formateado a "USB", se abre la aplicación **Terminal** en la Mac y se ejecuta el constructor oficial:
 
