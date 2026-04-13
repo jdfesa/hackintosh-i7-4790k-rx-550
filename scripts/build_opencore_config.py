@@ -3,7 +3,7 @@ import os
 
 print("Iniciando compilación de config.plist a medida para Haswell y RX 550 (Lexa)")
 
-plist_path = r".\EFI\OC\config.plist"
+plist_path = r"EFI/OC/config.plist"
 if not os.path.exists(plist_path):
     print(f"Error: No se encontró el archivo en {plist_path}")
     exit(1)
@@ -66,9 +66,8 @@ if nvram_guid in config['NVRAM']['Add']:
     config['NVRAM']['Add'][nvram_guid]['prev-lang:kbd'] = 'es:87'
 
 # 8. PlatformInfo (SMBIOS)
-# Usaremos iMac18,3 (o iMac17,1) para forzar a OCLP a reconocer la máquina como parcheable.
-# OCLP bloquea el parcheo de gráficas Polaris en iMacPro1,1 porque asume que es una Mac nativa e inmodificable.
-config['PlatformInfo']['Generic']['SystemProductName'] = 'iMac18,3'
+# Usaremos iMac14,2 como recomendó Alejandro para habilitar el soporte de IGPU en tareas de decodificación.
+config['PlatformInfo']['Generic']['SystemProductName'] = 'iMac14,2'
 
 # 9. UEFI Drivers
 config['UEFI']['Drivers'] = [
@@ -89,7 +88,17 @@ if pci_gpu_path not in config['DeviceProperties']['Add']:
 config['DeviceProperties']['Add'][pci_gpu_path]['device-id'] = spoof_bytes
 config['DeviceProperties']['Add'][pci_gpu_path]['model'] = 'AMD Radeon RX 550 (Lexa 699F Spoofed to Baffin 67FF)'
 
+# 11. Habilitar iGPU en modo sin salida de video (Headless) para que ayude a la decodificación
+pci_igpu_path = "PciRoot(0x0)/Pci(0x2,0x0)"
+igpu_platform_id = bytes.fromhex('04001204') # 04001204 es para Haswell Headless (Dortania)
+
+if pci_igpu_path not in config['DeviceProperties']['Add']:
+    config['DeviceProperties']['Add'][pci_igpu_path] = {}
+
+config['DeviceProperties']['Add'][pci_igpu_path]['AAPL,ig-platform-id'] = igpu_platform_id
+config['DeviceProperties']['Add'][pci_igpu_path]['model'] = 'Intel HD Graphics 4600 (Headless Mode for DRM/Decoding)'
+
 with open(plist_path, 'wb') as f:
     plistlib.dump(config, f)
 
-print(f"Modificación completa. Archivo guardado con éxito y Spoof aplicado en {pci_gpu_path}.")
+print(f"Modificación completa. Archivo guardado con éxito. Spoof Lexa en {pci_gpu_path} e iGPU en {pci_igpu_path}.")
