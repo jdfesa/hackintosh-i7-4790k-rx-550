@@ -59,4 +59,4 @@ Una vez creado el instalador de Sequoia con `createinstallmedia`, el proceso par
 
 A continuación se muestra el registro visual del proceso en la terminal:
 
-![Montaje y copia de EFI en el USB](images/preparacion_usb_sequoia.png)
+![Montaje y copia de EFI en el USB](images/preparacion_usb_sequoia.jpg)
