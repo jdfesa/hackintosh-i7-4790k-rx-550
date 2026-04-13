@@ -4,7 +4,20 @@ Una vez que el instalador de macOS oficial (`InstallAssistant.pkg` / `.app`) fue
 
 Esta etapa suele ser un punto común de errores si no se aplican los formatos correctos.
 
-## 1. Regla de Oro del Formateo: ¿APFS o Mac OS Extended?
+## 1. Identificación del Dispositivo USB
+Antes de formatear la memoria USB, es sumamente importante conocer el identificador lógico exacto que macOS le ha asignado para evitar borrar el disco incorrecto. Desde la aplicación **Terminal** en la Mac, se ejecuta el siguiente comando:
+
+```bash
+diskutil list external
+```
+
+Esto filtrará y mostrará únicamente los dispositivos de almacenamiento conectados externamente:
+
+![Buscando el identificador del USB en la terminal](./images/diskutil_list_output.png)
+
+Como se observa, se debe identificar el que diga `(external, physical)` para comprobar, por ejemplo, que es el número `/dev/disk8`.
+
+## 2. Regla de Oro del Formateo: ¿APFS o Mac OS Extended?
 Es un error muy frecuente pensar que el pendrive USB debe formatearse en **APFS** (el sistema de archivos moderno de Apple). Si bien es cierto que macOS requiere APFS para funcionar de forma nativa en el disco final, el **Pendrive de Instalación** tiene reglas diferentes estipuladas por Apple (Artículo de Soporte HT201372):
 
 > **¡Atención!** El pendrive USB debe formatearse EXCLUSIVAMENTE en **Mac OS Extended (Journaled)** (también traducido como *Mac OS Plus (con registro)*).
@@ -23,7 +36,7 @@ El comando oficial de Apple (`createinstallmedia`) está programado a bajo nivel
 
 ![Opciones de formateo obligatorias en Utilidad de Discos](./images/disk_utility_format.png)
 
-## 2. Flasheo Oficial por Terminal
+## 3. Flasheo Oficial por Terminal
 Con el disco formateado a "USB", se abre la aplicación **Terminal** en la Mac y se ejecuta el constructor oficial:
 
 ```bash
@@ -32,7 +45,7 @@ sudo "/Applications/Install macOS Tahoe 26.4.1_25E253.app/Contents/Resources/cre
 *(Nota: "Install macOS Tahoe..." es meramente un ejemplo del nombre de la App bajada de MIST, el nombre puede variar según la versión).*
 Se solicita la contraseña del usuario (la cual no mostrará asteriscos por seguridad) y se debe confirmar con la tecla `Y`. El proceso tardará dependiendo de las velocidades de escritura del puerto y la llave.
 
-## 3. Inyección de la Carpeta EFI (El "Cerebro" del Hackintosh)
+## 4. Inyección de la Carpeta EFI (El "Cerebro" del Hackintosh)
 Un instalador base de Apple jamas booteará en hardware ensamblado por piezas (Intel/AMD). La magia de hacer funcionar el sistema la provee la partición secundaria:
 
 1. Terminado el flasheo, se debe destapar la partición especial de arranque.
