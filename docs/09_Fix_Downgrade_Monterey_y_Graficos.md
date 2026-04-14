@@ -59,8 +59,8 @@ A modo de registro de nuestro proceso iterativo, dejamos asentado que originalme
 
 ![Descargando macOS Sequoia con Mist](images/mist_download_sequoia.png)
 
-*(Arriba: Intento original descargando Sequoia, el cual fue finalmente descartado a favor de descargar Monterey)*
+> *(Arriba: Intento original descargando Sequoia, el cual fue finalmente descartado a favor de descargar Monterey)*
 
 ![Montaje y copia de EFI en el USB](images/preparacion_usb_sequoia.jpg)
 
-*(Arriba: Demostración del montaje del pendrive y reemplazo de la carpeta EFI. Este método fue calcado para el pendrive definitivo de Monterey)*
+> *(Arriba: Demostración del montaje del pendrive y reemplazo de la carpeta EFI. Este método fue calcado para el pendrive definitivo de Monterey)*
