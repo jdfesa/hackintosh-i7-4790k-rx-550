@@ -1,32 +1,28 @@
 # Hackintosh i7-4790K + RX 550 (Lexa)
 
 > [!WARNING]
-> ## ⚠️ TRABAJO EN PROGRESO — Sesión pausada el 2026-04-13
+> ## ⚠️ TRABAJO EN PROGRESO — Sesión pausada el 2026-04-14
 >
-> **Estado actual:** macOS Tahoe 26.4.1 arranca y es usable, pero **sin aceleración Metal/GPU** (rendering por software).
+> **Estado actual:** macOS Tahoe y Sequoia probados. Ambos resultan **inviables** para un uso fluido debido a la falta de aceleración Metal/GPU con la tarjeta Lexa.
 >
-> ### Problema pendiente: AMD RX 550 (Lexa 699F) sin aceleración gráfica
-> - El spoof a Baffin (67FF) está aplicado correctamente en `DeviceProperties`.
-> - La ruta PCI detectada es correcta: `PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)`.
-> - WhateverGreen.kext está activo (no puede quitarse — sin imagen al arranque).
-> - OCLP 2.4.1 dice "No patches required" porque con SMBIOS `iMac18,3` (iMac con GPU Polaris real), no detecta necesidad de parchear.
-> - La aceleración gráfica Metal no está activa (verificar con `system_profiler SPDisplaysDataType | grep Metal`).
+> ### Problema Crítico Confirmado: AMD RX 550 (Lexa 699F)
+> - Las tarjetas Lexa necesitan un "Spoofing" para hacerse pasar por Baffin (67FF) porque Apple nunca les dio soporte oficial.
+> - A partir de macOS Ventura/Sonoma/Sequoia, Apple eliminó los drivers Polaris nativos.
+> - Al depender de OCLP (OpenCore Legacy Patcher) para reinyectarlos en Sequoia, el sistema cae en un "Catch-22": OCLP requiere aceleración Metal básica para renderizar su interfaz UI, pero como la Lexa no la tiene, la aplicación se muestra en blanco impidiendo parchar (Pantalla Blanca).
 >
-> ### Próximos pasos a investigar
-> 1. Ejecutar `system_profiler SPDisplaysDataType | grep -E "Vendor|Device|Metal|Chipset|Model"` para confirmar si Metal está activo.
-> 2. Revisar si `AMDRadeonX4000.kext` (driver Polaris) existe en el sistema o fue eliminado en Tahoe/Sequoia.
-> 3. Si el driver no existe en el sistema, OCLP es la única solución — investigar por qué no lo ofrece con `iMac18,3`.
-> 4. Alternativa: probar SMBIOS `MacPro7,1` o `iMac19,1` para ver si OCLP detecta diferente.
+> ### Decisión Técnica: Downgrade a macOS Monterey (12.x)
+> - Tras una investigación cruzada comunitaria, la solución dictaminada es instalar **macOS Monterey**.
+> - En Monterey, los drivers Polaris siguen estando de forma nativa en el sistema base de Apple.
+> - Se aplicará el spoofing en la EFI hacia Baffin (67FF), y Monterey activará la aceleración Metal al 100% de manera automática y nativa, sin requerir parches de OCLP rompiendo el sistema.
 >
-> ### Estado de la EFI actual
-> - SMBIOS: `iMac18,3`
-> - boot-args: `-v keepsyms=1 debug=0x100 alcid=1 -radcodec -no_compat_check revpatch=sbvmm -amfipassbeta agdpmod=pikera`
+> ### Estado de la EFI actual (Híbrida para Monterey)
+> - SMBIOS: `MacPro7,1`
+> - boot-args: `-v keepsyms=1 debug=0x100 alcid=1 amfi=0x80 watchdog=0 agdpmod=pikera dk.e1000=0 e1000=0`
 > - AMFIPass.kext v1.4.1 incluido y activo
-> - WhateverGreen.kext activo
-> - `amfi=0x80` eliminado (era la causa de inestabilidad previa)
-> - **Internet (Ethernet RealTek) funciona** ✅
+> - Prev-lang:kbd forzado a `en-US:0` para evitar bloqueos regionales en el instalador
+> - **Internet (Intel/Realtek/Atheros) inyectado vía Oralilla base** ✅
 > - **Audio funciona** ✅
-> - **GPU: detectada pero SIN Metal** ⚠️
+> - **GPU: Spoof Baffin activado, listo para Metal Nativo en Monterey** ⏳
 
 Bienvenido a este repositorio. Este proyecto documenta y contiene la configuración (carpeta EFI) para instalar macOS (Vanilla OpenCore) en una PC de escritorio basada en arquitectura Intel Haswell y gráficos AMD Polaris/Lexa.
 
