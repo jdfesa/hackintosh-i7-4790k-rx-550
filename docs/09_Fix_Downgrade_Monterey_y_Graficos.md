@@ -58,7 +58,9 @@ A modo de registro de nuestro proceso iterativo, dejamos asentado que originalme
 > **Aclaración sobre estas imágenes:** Las capturas de Mist y de la terminal muestran referencias a "Sequoia". Se incluyen aquí solo como registro de nuestro intento previo fallido. Concluida la investigación, se demostró que ese instalador no era viable para la gráfica Lexa. El procedimiento técnico de montaje de disco y copia de la carpeta EFI documentado en la última captura se aplicó de **forma exactamente idéntica** al USB final de macOS Monterey.
 
 ![Descargando macOS Sequoia con Mist](images/mist_download_sequoia.png)
+
 *(Arriba: Intento original descargando Sequoia, el cual fue finalmente descartado a favor de descargar Monterey)*
 
 ![Montaje y copia de EFI en el USB](images/preparacion_usb_sequoia.jpg)
+
 *(Arriba: Demostración del montaje del pendrive y reemplazo de la carpeta EFI. Este método fue calcado para el pendrive definitivo de Monterey)*
