@@ -14,6 +14,14 @@
 				<key>Path</key>
 				<string>MaLd0n.aml</string>
 			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>GPU Lexa to Baffin ACPI-level spoof (\_SB.PCI0.PEG0.PEGP Haswell B85)</string>
+				<key>Enabled</key>
+				<true/>
+				<key>Path</key>
+				<string>SSDT-GPU-SPOOF.aml</string>
+			</dict>
 		</array>
 		<key>Delete</key>
 		<array/>
@@ -99,12 +107,8 @@
 		<dict>
 			<key>PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)</key>
 			<dict>
-				<key>device-id</key>
-				<data>
-				/2cAAA==
-				</data>
 				<key>model</key>
-				<string>AMD Radeon RX 550 (Lexa 699F Spoofed to Baffin 67FF)</string>
+				<string>AMD Radeon RX 550 (Lexa 699F - ACPI SSDT Spoof Active)</string>
 			</dict>
 			<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
 			<dict>
