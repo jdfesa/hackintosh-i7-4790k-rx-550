@@ -1,6 +1,6 @@
 # Fase 5: Descarga Oficial del Sistema Operativo con MIST
 
-Para asegurar una instalación fluida, segura y libre de modificaciones malintencionadas (como ocurre a menudo con distribuciones estilo Olarila), **debemos descargar el instalador original y genuino de macOS**. 
+Para asegurar una instalación fluida, segura y libre de modificaciones malintencionadas, **debemos descargar el instalador original y genuino de macOS**. 
 
 La magia de este proyecto es que **hemos optado por la "Ruta VIP"**. Dado que contamos afortunadamente con una computadora Apple adicional (una MacBook Pro antigua), podemos generar el USB instalador ("Full Offline Installer") oficial, evitando por completo el sufrimiento de construir este disco nativo desde Windows, lo cual habría sido el equivalente a armar un rompecabezas a ciegas.
 
