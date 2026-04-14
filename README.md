@@ -1,5 +1,21 @@
 # Hackintosh i7-4790K + RX 550 Lexa — macOS Monterey
 
+> [!CAUTION]
+> ## ⛔ No copies esta EFI directamente
+>
+> Este repositorio es una **contribución técnica a la comunidad hackintosh**, no una EFI lista para usar. El autor lo comparte para documentar la solución porque otras personas en la misma situación (RX 550 Lexa sin Metal) no encontraban información clara — y una EFI pública de otro repo fue el punto de partida que permitió encontrar la respuesta.
+>
+> **Por qué NO deberías copiar y pegar la EFI tal cual:**
+> - El `config.plist` contiene un **número de serie (Serial Number), MLB y SystemUUID** generados específicamente para este hardware. Usarlos en otro equipo puede causar conflictos con los servidores de Apple (iMessage, iCloud, activación).
+> - La ruta ACPI del GPU (`\_SB.PCI0.PEG0.PEGP`) y el path PCI son **específicos de esta placa B85**. En otro hardware pueden ser completamente distintos.
+> - Los kexts de red están configurados para el controlador Realtek de esta placa. El tuyo puede ser diferente.
+>
+> **Qué SÍ podés (y deberías) hacer:**
+> 1. Estudiar la técnica del `SSDT-GPU-SPOOF.aml` documentada en [`docs/10`](docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md).
+> 2. Verificar la ruta ACPI de tu propia GPU con Hackintool (pestaña PCIe).
+> 3. Compilar tu propio SSDT adaptado usando el fuente en `scripts/SSDT-GPU-SPOOF-Haswell.dsl` como base.
+> 4. Generar tus propios seriales SMBIOS con [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS).
+
 > [!NOTE]
 > ## ✅ FUNCIONANDO — Metal GPU Activo (2026-04-14)
 >
