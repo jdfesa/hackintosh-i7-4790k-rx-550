@@ -11,7 +11,7 @@
  * driver to load against the Lexa chip. Based on dipaksarkar's working EFI
  * for H510M-H (Comet Lake, ACPI path: \_SB.PC00.PEG1.PEGP).
  *
- * Adapted by: Antigravity / jdfesa hackintosh project
+ * Adapted by: jdfesa hackintosh project
  * Reference:  https://github.com/dipaksarkar/EFI-GIGABYTE-H510M-H
  */
 
