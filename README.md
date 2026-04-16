@@ -94,7 +94,11 @@ La EFI funcional fue adaptada para Tahoe. Elementos clave:
    ioreg -l | grep "AMDBaffinGraphicsAccelerator" | grep -v "=0"
    # → registered, matched, active
    ```
-4. Si el acelerador no carga: asegurarse de que `SSDT-GPU-SPOOF.aml` está en `EFI/OC/ACPI/` **y** declarado en `config.plist → ACPI → Add`
+4. **Resumen Visual y Validación Final:** Incluimos un script agresivo que exprime el sistema y te dibuja un reporte a color demostrando tu victoria absoluta de hardware. Ejecutá en tu terminal:
+   ```bash
+   bash scripts/show_hardware_status.sh
+   ```
+5. Si el acelerador no carga: asegurarse de que `SSDT-GPU-SPOOF.aml` está en `EFI/OC/ACPI/` **y** declarado en `config.plist → ACPI → Add`
 
 ---
 
