@@ -1,5 +1,7 @@
 # Hackintosh i7-4790K + RX 550 Lexa — macOS Tahoe (26.x)
 
+![Victoria Absoluta: Aceleración Nativa en Tahoe](docs/images/tahoe_victory.jpg)
+
 > [!CAUTION]
 > ## ⛔ No copies esta EFI directamente
 >
