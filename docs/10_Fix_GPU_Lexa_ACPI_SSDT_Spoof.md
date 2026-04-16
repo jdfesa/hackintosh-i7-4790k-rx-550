@@ -1,7 +1,7 @@
 # 10 — Solución Definitiva: Aceleración Metal en RX 550 Lexa via SSDT ACPI
 
-> **Estado:** ✅ RESUELTO — Metal confirmado activo en macOS Monterey 12.x  
-> **Fecha:** 2026-04-14  
+> **Estado:** ✅ RESUELTO — Metal confirmado activo fluidamente en **macOS Tahoe (26.x)** y Monterey  
+> **Fecha:** 2026-04-16 (Actualizado)  
 > **Horas invertidas:** ~72 horas distribuidas en varios días de iteración
 
 ---
@@ -153,7 +153,7 @@ DefinitionBlock ("", "SSDT", 2, "DRTNIA", "AMDGPU", 0x00001000)
 ### 5. Desplegar en la EFI
 
 ```bash
-cp SSDT-GPU-SPOOF-Haswell.aml EFI_Monterey/EFI/OC/ACPI/SSDT-GPU-SPOOF.aml
+cp SSDT-GPU-SPOOF-Haswell.aml EFI_Tahoe/EFI/OC/ACPI/SSDT-GPU-SPOOF.aml
 ```
 
 ### 6. Actualizar `config.plist`
@@ -239,5 +239,5 @@ ioreg | grep AMDRadeonX4000_AMD | grep -v "=0"
 |---------|-----------|-----------|
 | `SSDT-GPU-SPOOF-Haswell.dsl` | `/` (raíz del repo) | Código fuente del SSDT adaptado |
 | `SSDT-GPU-SPOOF-Haswell.aml` | `/` (raíz del repo) | Binario compilado (fuente de verdad) |
-| `SSDT-GPU-SPOOF.aml` | `EFI_Monterey/EFI/OC/ACPI/` | El SSDT activo en la EFI |
-| `config.plist` | `EFI_Monterey/EFI/OC/` | ACPI/Add apunta a este SSDT |
+| `SSDT-GPU-SPOOF.aml` | `EFI/OC/ACPI/` | El SSDT activo en tu EFI (aplica a Tahoe o Monterey) |
+| `config.plist` | `EFI/OC/` | ACPI/Add apunta a este SSDT |

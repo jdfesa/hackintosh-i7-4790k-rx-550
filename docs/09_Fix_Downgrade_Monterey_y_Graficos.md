@@ -1,5 +1,14 @@
 # 09. Solución a la Lentitud y Pantalla Blanca: Downgrade a macOS Monterey
 
+> [!WARNING]
+> ## 🚨 DOCUMENTO OBSOLETO: ¡El hardware SÍ soporta Tahoe perfectamente!
+> 
+> **Actualización (2026-04-16):** La principal conclusión de este documento (*"Las Lexa son imposibles en Tahoe/Sequoia"*) fue demostrada como **FALSA**. El equipo hoy corre macOS Tahoe (26.x) con la RX 550 de manera **completamente fluida y con aceleración Metal funcional**.
+> 
+> El limitante real nunca fue macOS ni la ausencia de parches, sino nuestro **método de inyección (spoof)**. Al cambiar la inyección hacia una **inyección nivel ACPI (SSDT)**, macOS Tahoe identifica y acelera de manera **100% nativa** la Lexa, sin necesidad absoluta de utilizar OpenCore Legacy Patcher (OCLP) ni parches root.
+> 
+> *Ver documento **[10. Fix GPU Lexa ACPI SSDT Spoof](10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md)** y el **[README principal](../README.md)** para la configuración activa.*
+
 ## El Problema con Tahoe y Sequoia
 Inicialmente, intentamos instalar y configurar **macOS Tahoe** y posteriormente **macOS Sequoia**. Aunque logramos arrancar y engañar (mediante *spoofing*) la dGPU RX 550 (Lexa) para que el sistema la reconociera como Baffin (RX 560), el rendimiento general del equipo resultó ser inaceptablemente lento (pantalla blanca, falta de Metal, lag crítico en la interfaz gráfica).
 
@@ -46,10 +55,14 @@ Se ha modificado el archivo `config.plist` (en la sección NVRAM) forzando el id
 > [!IMPORTANT]
 > **Es obligatorio hacer un "Reset NVRAM" (Reiniciar NVRAM)** desde el menú principal de OpenCore (presionando la barra espaciadora si no está visible) la primera vez que se arranque con esta nueva EFI. Esto borrará la caché del viejo idioma y asegurará un despliegue limpio.
 
-## Resumen y Advertencia Final
+## Resumen y Advertencia Final (Histórico)
+*(Lo que pensábamos originalmente - ABRIL 2026)*
 **No intentes actualizar a macOS Ventura, Sonoma, Sequoia o Tahoe con la RX 550 Lexa.** 
 
 El camino oficial y estable, sin lidiar con pantallas blancas o parches rotos de OCLP, es **macOS Monterey**. Quédate en esta versión y el hardware volará con aceleración por hardware completa. Si alguna vez necesitas actualizar el sistema operativo, el equipo requerirá obligatoriamente el cambio físico de la tarjeta gráfica por una compatible de forma nativa (Ej: RX 580 o serie 6000).
+
+*(La realidad probada y definitiva)*
+**¡Este resumen estaba equivocado!** Un buen Spoof ACPI (SSDT) anula todo lo dicho aquí y habilita la instalación de Tahoe de lujo, demostrando que una configuración de hardware impecable desde el firmware evita comprar hardware nuevo.
 
 ## Anexo Histórico: Preparación fallida para Sequoia
 A modo de registro de nuestro proceso iterativo, dejamos asentado que originalmente creamos un instalador buscando hacer funcionar macOS Sequoia, lo cual quedó documentado con las siguientes capturas. 

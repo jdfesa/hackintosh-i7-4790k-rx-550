@@ -1,5 +1,8 @@
 # Troubleshooting y Solución de Arranque - macOS Tahoe (15)
 
+> [!NOTE]
+> **🌟 Actualización 2026-04-16:** Contrario a nuestras pruebas iniciales, **macOS Tahoe SÍ es completamente compatible con la gráfica RX 550 Lexa**. El secreto es utilizar un spoof a nivel ACPI (SSDT) para levantar la aceleración. Lo más impresionante: ¡El soporte gráfico es **totalmente nativo**, sin requerir OCLP en lo absoluto! Este documento conserva los detalles originales de configuración que permitieron arrancar Tahoe.
+
 Este documento registra los problemas encontrados y las soluciones aplicadas durante el proceso de instalación de **macOS Tahoe** en un sistema basado en la arquitectura **Intel Haswell**. Es importante documentar esto de forma detallada, ya que macOS Tahoe probablemente sea una de las últimas versiones compatibles con procesadores x86.
 
 ## Hardware Objetivo
@@ -36,12 +39,11 @@ Para eliminar el mensaje de "Este Mac no es compatible", aplicamos medidas para 
 *A modo de recordatorio para la fase del instalador:* 
 - Para que la unidad SSD interna aparezca correctamente en el instalador y se pueda proceder a su uso, se estableció que debe estar obligatoriamente formateada como **Mac OS Extended (Journaled)** o preferiblemente **APFS**, utilizando un mapa de particiones **GUID (GPT)**.
 
-### 5. Inestabilidad y Falta de Aceleración Gráfica (Transparencias)
-Un problema común al instalar macOS Tahoe/Sequoia con tarjetas AMD antiguas (Polaris/Baffin como la RX 550) es que el sistema arranca pero es extremadamente inestable y carece de aceleración Metal (sin transparencias). Esto se debe a dos errores frecuentes:
-
-- **Error en OpenCore Legacy Patcher (OCLP):** Muchos usuarios buscan forzar el parche buscando la tarjeta en `Settings -> Advanced -> Graphics Override`. **Esta opción está diseñada ÚNICAMENTE para tarjetas MXM en iMacs antiguos**, no para Hackintosh. En un Hackintosh, OCLP detecta automáticamente el Spoof de la GPU si está bien configurado en el `config.plist`. Para aplicar el parche de AMD Polaris, simplemente se debe ir al menú principal de OCLP y hacer clic en **"Post-Install Root Patch"**.
-- **Inestabilidad por AMFI (`amfi=0x80`):** Tener `amfi=0x80` en los `boot-args` desactiva completamente el sistema de integridad (Apple Mobile File Integrity). En macOS Tahoe/Sequoia, esto **rompe el sistema de permisos (TCC), causa crasheos constantes de aplicaciones y vuelve el WindowServer inestable**. 
-  - *Solución:* Se debe **eliminar** `amfi=0x80` de los `boot-args`, y en su lugar, instalar el kext `AMFIPass.kext` (v1.4.1 o superior) añadiendo el argumento `-amfipassbeta` si se requiere, permitiendo así que OCLP funcione sin destruir la estabilidad del OS.
+### 5. ¿Aceleración Gráfica sin OCLP? ¡Sí!
+Originalmente asumimos que macOS Tahoe carecía por completo de drivers Baffin/Polaris nativos. Sin embargo, se demostró que con el **spoof correcto a nivel ACPI (SSDT)**:
+- **La RX 550 Lexa levanta con aceleración Metal 100% nativa.**
+- **Cero dependencia de OCLP:** Ya no es necesario aplicar *Root Patches*, ni lidiar con los errores clásicos de la pantalla en blanco de OpenCore Legacy Patcher.
+- **Estabilidad Nativa:** Al no tener que parchear el sistema ni desactivar SIP o AMFI para gráficos, la integridad de macOS, sus permisos (TCC) y el WindowServer permanecen inalterados e impecables.
 
 ---
 *Documentación generada para facilitar futuras instalaciones y mantenimientos del equipo en macOS Tahoe.*

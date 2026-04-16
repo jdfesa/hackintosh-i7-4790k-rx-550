@@ -1,4 +1,4 @@
-# Hackintosh i7-4790K + RX 550 Lexa — macOS Monterey
+# Hackintosh i7-4790K + RX 550 Lexa — macOS Tahoe (26.x)
 
 > [!CAUTION]
 > ## ⛔ No copies esta EFI directamente
@@ -17,11 +17,11 @@
 > 4. Generar tus propios seriales SMBIOS con [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS).
 
 > [!NOTE]
-> ## ✅ FUNCIONANDO — Metal GPU Activo (2026-04-14)
+> ## ✅ FUNCIONANDO — Metal GPU Activo en macOS Tahoe (26.4.1)
 >
-> Tras **varios días de batalla intensa** probando configuraciones, versiones de macOS, herramientas de parcheo y docenas de combinaciones de kexts y boot-args, el sistema **finalmente funciona con aceleración Metal completa**.
+> Tras **varios días de batalla intensa** probando configuraciones, el sistema **finalmente funciona con aceleración Metal completa** en **macOS Tahoe 26.4.1 (25E253)**!
 >
-> **La clave que nadie documentaba claramente:** el spoofing de GPU en chips Lexa **no funciona** vía `DeviceProperties` en el `config.plist` de OpenCore. Hay que hacerlo a nivel ACPI mediante un `SSDT-GPU-SPOOF.aml` compilado con la ruta correcta del hardware.
+> **La clave que nadie documentaba claramente:** el spoofing de GPU en chips Lexa **no funciona** vía `DeviceProperties` en el `config.plist` de OpenCore. Hay que hacerlo a nivel ACPI mediante un `SSDT-GPU-SPOOF.aml` compilado con la ruta correcta del hardware. Al hacerlo así, macOS reconoce la placa con aceleración 100% como Baffin (`67FF`), habilitando Metal!
 >
 > Ver documentación completa en [`docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md`](docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md)
 
@@ -40,12 +40,13 @@ Este proyecto no fue una instalación rápida. Fue una investigación real de in
 
 | Intento | macOS | Resultado |
 |---------|-------|-----------|
-| **Tahoe (macOS 26)** | Primera prueba | ❌ Sin aceleración, lag crítico |
-| **Sequoia (macOS 15)** | Segunda prueba | ❌ OCLP en blanco (catch-22 sin Metal básico) |
+| **Tahoe (macOS 26) sin spoof ACPI** | Primera prueba | ❌ Sin aceleración, lag crítico |
+| **Sequoia (macOS 15) sin spoof ACPI** | Segunda prueba | ❌ Interfaz sin respuesta (catch-22 sin Metal básico) |
 | **Monterey + DeviceProperties spoof** | Tercera prueba | ❌ GPU identificada, acelerador `=0` |
-| **Monterey + SSDT ACPI spoof** | **Solución final** | ✅ Metal activo, sistema fluido |
+| **Monterey + SSDT ACPI spoof** | Progreso sólido | ✅ Metal activo, demostró que el spoof funcionaba |
+| **Tahoe (macOS 26.4.1) + SSDT ACPI spoof** | **Victoria Absoluta** | ✅ Metal activo, sistema perfectamente fluido con RX 550 |
 
-La GPU spoofada pasó de `AMDBaffinGraphicsAccelerator=0` a `registered, matched, active`. Ver evidencia completa en `/docs`.
+La GPU spoofada pasó de fallar repetidamente a mostrar **Metal: Supported** (con drivers Baffin `AMDRadeonX4000` ejecutándose 100% estable). ¡La persistencia dio sus frutos!
 
 ---
 
@@ -60,17 +61,17 @@ La GPU spoofada pasó de `AMDBaffinGraphicsAccelerator=0` a `registered, matched
 - **Almacenamiento macOS:** SSD SATA 256 GB en caja USB 3.0 externa
 - **Red:** Realtek PCIe GbE Family Controller
 - **Audio:** High Definition Audio (Realtek)
-- **macOS instalado:** Monterey 12.x (última versión con drivers Polaris nativos)
+- **macOS instalado:** Tahoe 26.4.1 (Build 25E253)
 
 ---
 
 ## Configuración EFI Activa
 
-La EFI funcional se encuentra en `/EFI_Monterey/`. Elementos clave:
+La EFI funcional fue adaptada para Tahoe. Elementos clave:
 
 | Componente | Valor | Propósito |
 |-----------|-------|-----------|
-| **SMBIOS** | `MacPro7,1` | Compatibilidad Monterey |
+| **SMBIOS** | `MacPro7,1` | Compatibilidad y estabilidad |
 | **SSDT** | `SSDT-GPU-SPOOF.aml` | Spoof Lexa → Baffin a nivel ACPI |
 | **boot-args** | `-radcodec agdpmod=pikera` | Decodificación HW y salida display AMD |
 | **iGPU** | HD 4600 headless (`04001204`) | Asistencia decodificación |
@@ -81,7 +82,7 @@ La EFI funcional se encuentra en `/EFI_Monterey/`. Elementos clave:
 
 ## Para Reproducir Este Hackintosh
 
-1. Instalar macOS Monterey desde un USB con la EFI de `/EFI_Monterey`
+1. Instalar macOS usando el USB con una EFI funcional. Gracias al Spoof ACPI, la aceleración es **totalmente nativa (no se requiere OCLP)**.
 2. En OpenCore picker: **Reset NVRAM** antes del primer arranque tras cambios
 3. Verificar que Metal está activo:
    ```bash
