@@ -1,6 +1,6 @@
 # Hackintosh i7-4790K + RX 550 Lexa — macOS Tahoe (26.x)
 
-![Victoria Absoluta: Aceleración Nativa en Tahoe](docs/images/tahoe_victory.jpg)
+![Aceleración 3D Conseguida: Metal Nativo en Tahoe](docs/images/tahoe_victory.jpg)
 
 > [!CAUTION]
 > ## ⛔ No copies esta EFI directamente
@@ -21,9 +21,11 @@
 > [!NOTE]
 > ## ✅ FUNCIONANDO — Metal GPU Activo en macOS Tahoe (26.4.1)
 >
-> Tras **varios días de batalla intensa** probando configuraciones, el sistema **finalmente funciona con aceleración Metal completa** en **macOS Tahoe 26.4.1 (25E253)**!
+> Tras varios días de investigación y pruebas, el sistema **funciona con aceleración Metal y QE/CI** en **macOS Tahoe 26.4.1 (25E253)**. La GPU renderiza gráficos 3D, transparencias y animaciones con fluidez nativa.
 >
-> **La clave que nadie documentaba claramente:** el spoofing de GPU en chips Lexa **no funciona** vía `DeviceProperties` en el `config.plist` de OpenCore. Hay que hacerlo a nivel ACPI mediante un `SSDT-GPU-SPOOF.aml` compilado con la ruta correcta del hardware. Al hacerlo así, macOS reconoce la placa con aceleración 100% como Baffin (`67FF`), habilitando Metal!
+> **Hallazgo clave:** en este hardware y esta GPU, el spoofing de la Lexa vía `DeviceProperties` en `config.plist` no logró activar el acelerador. El método que funcionó consistentemente fue la inyección a nivel ACPI mediante `SSDT-GPU-SPOOF.aml` compilado con la ruta correcta del hardware. Al hacerlo así, macOS reconoce la placa como Baffin (`67FF`), habilitando Metal.
+>
+> **Nota:** Metal activo **no equivale** a soporte multimedia completo — la decodificación de video por hardware (VideoToolbox/AppleGVA) sigue sin funcionar. Ver [limitaciones](#%EF%B8%8F-limitación-conocida-decodificación-de-video-por-hardware).
 >
 > Ver documentación completa en [`docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md`](docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md)
 
@@ -32,7 +34,7 @@
 > [!IMPORTANT]
 > ## ⚠️ Advertencia: RX 550 Lexa requiere configuración especial
 >
-> La **AMD RX 550 con chip Lexa (Device ID `1002:699F`)** no tiene soporte nativo en macOS. Funciona mediante un spoof a Baffin (`67FF`), **pero únicamente si la inyección se hace a nivel ACPI** (SSDT), no a nivel OpenCore (DeviceProperties). Ver [`docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md`](docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md) para entender por qué y cómo reproducirlo.
+> La **AMD RX 550 con chip Lexa (Device ID `1002:699F`)** no tiene soporte nativo en macOS. Funciona mediante un spoof a Baffin (`67FF`). En este hardware (Haswell B85), la inyección vía `DeviceProperties` no activó el acelerador — **el método que funcionó fue ACPI/SSDT**. Otros usuarios con variantes distintas de RX 550 podrían tener resultados diferentes. Ver [`docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md`](docs/10_Fix_GPU_Lexa_ACPI_SSDT_Spoof.md) para entender por qué y cómo reproducirlo.
 
 ---
 
@@ -46,9 +48,9 @@ Este proyecto no fue una instalación rápida. Fue una investigación real de in
 | **Sequoia (macOS 15) sin spoof ACPI** | Segunda prueba | ❌ Interfaz sin respuesta (catch-22 sin Metal básico) |
 | **Monterey + DeviceProperties spoof** | Tercera prueba | ❌ GPU identificada, acelerador `=0` |
 | **Monterey + SSDT ACPI spoof** | Progreso sólido | ✅ Metal activo, demostró que el spoof funcionaba |
-| **Tahoe (macOS 26.4.1) + SSDT ACPI spoof** | **Victoria Absoluta** | ✅ Metal activo, sistema perfectamente fluido con RX 550 |
+| **Tahoe (macOS 26.4.1) + SSDT ACPI spoof** | **Aceleración 3D Conseguida** | ✅ Metal activo, sistema fluido. Decode de video pendiente (ver limitaciones) |
 
-La GPU spoofada pasó de fallar repetidamente a mostrar **Metal: Supported** (con drivers Baffin `AMDRadeonX4000` ejecutándose 100% estable). ¡La persistencia dio sus frutos!
+La GPU spoofada pasó de fallar repetidamente a mostrar **Metal: Supported** (con drivers Baffin `AMDRadeonX4000` ejecutándose de forma estable). Metal y QE/CI operativos; la decodificación de video por hardware queda como [limitación conocida](#%EF%B8%8F-limitación-conocida-decodificación-de-video-por-hardware).
 
 ---
 
@@ -75,7 +77,7 @@ La EFI funcional fue adaptada para Tahoe. Elementos clave:
 |-----------|-------|-----------| 
 | **SMBIOS** | `MacPro7,1` | Identidad dGPU-only, compatible con Tahoe |
 | **SSDT** | `SSDT-GPU-SPOOF.aml` | Spoof Lexa → Baffin a nivel ACPI |
-| **boot-args** | `-radcodec agdpmod=pikera` | Forzar decode AMD y salida display |
+| **boot-args** | `-radcodec agdpmod=pikera` | Intento de decode AMD (sin efecto confirmado en Lexa spoofada) + salida display |
 | **iGPU** | HD 4600 headless (`04001204`) | Declarada pero **sin drivers en Tahoe** (ver limitaciones) |
 | **Red** | RealtekRTL8111.kext | Ethernet funcionando |
 | **Audio** | AppleALC alcid=1 | Audio funcionando |
@@ -93,7 +95,7 @@ La EFI funcional fue adaptada para Tahoe. Elementos clave:
 
 En un hackintosh Haswell, la decodificación de video por hardware normalmente depende de **Intel QuickSync** (iGPU HD 4600). Aunque la iGPU está configurada en modo headless (`AAPL,ig-platform-id = 04001204`), **Apple eliminó por completo los drivers de Intel HD 4600 (Haswell) a partir de macOS Ventura (13.x)**. En macOS Tahoe, la iGPU está declarada en el config.plist pero macOS no tiene drivers para utilizarla.
 
-El flag `-radcodec` en boot-args intenta forzar la decodificación vía AMD, pero la RX 550 spoofada a Baffin no logra activar el framework AppleGVA para decode. Cuando macOS no encuentra hardware de decodificación disponible, hace **fallback silencioso a decodificación por CPU (software)**.
+El flag `-radcodec` en boot-args intenta forzar la decodificación vía AMD. Sin embargo, la evidencia comunitaria alrededor de la Lexa spoofada a Baffin indica que **no garantiza activar H.264/H.265 por hardware en estas RX 550** — hay reportes concretos donde incluso con spoof correcto la tarjeta sigue sin decode por hardware ni DRM pleno. En esta configuración, `-radcodec` no logra activar el framework AppleGVA. Cuando macOS no encuentra hardware de decodificación disponible, hace **fallback silencioso a decodificación por CPU (software)**.
 
 ### Impacto medido (datos reales del sistema)
 
@@ -121,36 +123,37 @@ Mediciones realizadas reproduciéndose un video 4K HDR 60fps en YouTube (Safari)
 
 ### Estado actual y próximos pasos
 
-**Actualmente en Tahoe (26.x)** — Metal funciona de forma nativa sin OCLP, pero sin decodificación de video por hardware. El sistema es funcional para uso general, pero no está aprovechando el 100% del hardware disponible.
+**Actualmente en Tahoe (26.x)** — Metal y aceleración 3D funcionan de forma nativa sin OCLP. Esto **no equivale** a soporte completo del stack multimedia: la decodificación de video por hardware (VideoToolbox/AppleGVA) no está activa. El sistema es funcional para uso general y el i7-4790K compensa con potencia bruta en decodificación por software.
 
-### Roadmap: Hacia un sistema completamente optimizado
+### Roadmap: Escenarios evaluados
 
-El objetivo es que este hackintosh funcione como una **máquina secundaria sólida**, sin nada que envidiarle en rendimiento a Windows o Linux sobre el mismo hardware. Para lograrlo, queda pendiente evaluar la activación completa de la iGPU.
+El objetivo es que este hackintosh funcione como una **máquina secundaria sólida**. Para el decode de video por hardware se necesitaría reactivar la iGPU Intel HD 4600 (QuickSync), lo cual requiere drivers que Apple eliminó a partir de Ventura.
 
-#### Opción A — OCLP soporta Tahoe (esperar)
-Si OCLP añade soporte para macOS Tahoe en el futuro, se podrían reinyectar los drivers de Intel HD 4600 vía root patches **sin bajar de versión**. Eso daría lo mejor de ambos mundos: última versión de macOS + decodificación por hardware.
+| Escenario | Soporte Metal | HW Decode | OCLP requerido | Madurez | Valoración |
+|-----------|:---:|:---:|:---:|---|---|
+| **Tahoe (actual)** | ✅ Nativo | ❌ | No | Configuración validada | Ideal si el decode por software es aceptable |
+| **Sonoma** | ✅ con OCLP | 🟡 Posible con OCLP | Sí | Patching Legacy Metal maduro y estable | **Candidato principal** si se busca HW decode |
+| **Sequoia** | ✅ con OCLP | 🟡 Posible con OCLP | Sí | Soporte OCLP confirmado, menor madurez que Sonoma | Alternativa viable |
+| **Monterey** | ✅ Nativo | ✅ Nativo | No | Última versión con drivers Haswell nativos | Baseline de control para verificar HW decode |
 
-#### Opción B — Downgrade a macOS Sequoia con iGPU activa (evaluar)
-Si la Opción A no se materializa, se evaluaría instalar **macOS Sequoia (15.x)** con la siguiente configuración (sugerida por un miembro de la comunidad):
+#### Sobre OCLP y Tahoe
 
-- **SMBIOS:** `iMac14,2` (perfil nativo Haswell con soporte iGPU + dGPU)
-- **iGPU Intel HD 4600:** Configurada según la [guía de Dortania para dGPU + iGPU Haswell](https://dortania.github.io/OpenCore-Install-Guide/config.plist/haswell.html) en modo compute/headless
-- **dGPU RX 550:** Mantener el SSDT ACPI spoof a Baffin para Metal
-- **OCLP:** Aplicar root patches para reinyectar los drivers Haswell eliminados
-- **Resultado esperado:** QuickSync activo para decodificación H.264/HEVC por hardware, liberando ~2.5 cores de CPU durante reproducción de video
+El soporte oficial y estable de OCLP para macOS Tahoe **sigue sin confirmarse**. Existen nightlies y forks como OCLP-Plus, pero con resultados mixtos y sin el grado de confianza que tuvo Sonoma o Sequoia. No es prudente contar con esto como solución a corto plazo.
+
+#### Decisión actual
+
+Tras evaluar el impacto real con benchmarks (ver tablas arriba), la configuración actual de Tahoe **se mantiene como daily driver**. El decode por software en 1080p/1440p consume menos de 1 core y es imperceptible en uso cotidiano. Solo en escenarios de 4K simultáneo con VMs o compilación pesada justificaría reconsiderar un downgrade — en cuyo caso, **Sonoma sería el candidato principal** por la madurez de su patching Legacy Metal.
 
 > [!NOTE]
-> ### TODO — Evaluación pendiente antes de decidir
+> ### TODO — Evaluación pendiente
 >
-> - [ ] Hacer benchmark de CPU prolongado (video 4K + compilación + VM) para medir el impacto real en workloads exigentes
-> - [ ] Investigar si OCLP ha añadido soporte para Tahoe
-> - [ ] Si no, evaluar la instalación de Sequoia en una partición separada para comparar rendimiento lado a lado
-> - [ ] Configurar iGPU según Dortania (dGPU + iGPU Haswell) y verificar que AppleGVA se activa
-> - [ ] Comparar CPU usage en video 4K con y sin hardware decode
-> - [ ] Evaluar estabilidad del sistema parcheado con OCLP a lo largo del tiempo
-> - [ ] Decisión final: ¿la ganancia en rendimiento justifica perder SIP, updates directos y la última versión de macOS?
+> - [ ] Benchmark de CPU prolongado (video 4K + compilación + VM) para medir impacto en workloads exigentes
+> - [ ] Monitorear si OCLP anuncia soporte oficial para Tahoe
+> - [ ] Si se decide bajar: probar Sonoma en partición separada con SMBIOS `iMac14,2`, iGPU headless según [guía Dortania Haswell](https://dortania.github.io/OpenCore-Install-Guide/config.plist/haswell.html), y OCLP root patches
+> - [ ] Verificar activación de AppleGVA y comparar CPU usage con/sin HW decode
+> - [ ] Decisión final: ¿la ganancia justifica perder SIP, updates directos y la última versión de macOS?
 >
-> El criterio es simple: si bajar una versión significa que el equipo rinde considerablemente mejor en multitarea real, se baja. Si la diferencia es marginal para el uso diario, no vale la pena el mantenimiento extra.
+> El criterio es pragmático: si la diferencia en multitarea real es considerable, se baja a Sonoma. Si es marginal para el uso diario, no vale la pena el mantenimiento extra de OCLP.
 
 ---
 
@@ -199,4 +202,4 @@ Este repositorio es **público**. Si lograste hacer funcionar Metal con otro mé
 | 08 | Troubleshooting Tahoe | Por qué Tahoe fue descartado |
 | 09 | Veredicto GPU y Downgrade a Monterey | La investigación comunitaria y la decisión técnica |
 | **10** | **Fix GPU Lexa — SSDT ACPI Spoof** | **La solución definitiva documentada paso a paso** |
-| **11** | **Limitaciones: HW Decode y análisis iGPU** | **Análisis técnico del decode por hardware y costo-beneficio Tahoe vs Sequoia** |
+| **11** | **Limitaciones: HW Decode y análisis iGPU** | **Análisis técnico del decode por hardware y evaluación de escenarios macOS** |
