@@ -129,12 +129,12 @@ Mediciones realizadas reproduciéndose un video 4K HDR 60fps en YouTube (Safari)
 
 El objetivo es que este hackintosh funcione como una **máquina secundaria sólida**. Para el decode de video por hardware se necesitaría reactivar la iGPU Intel HD 4600 (QuickSync), lo cual requiere drivers que Apple eliminó a partir de Ventura.
 
-| Escenario | Soporte Metal | HW Decode | OCLP requerido | Madurez | Valoración |
-|-----------|:---:|:---:|:---:|---|---|
-| **Tahoe (actual)** | ✅ Nativo | ❌ | No | Configuración validada | Ideal si el decode por software es aceptable |
-| **Sonoma** | ✅ con OCLP | 🟡 Posible con OCLP | Sí | Patching Legacy Metal maduro y estable | **Candidato principal** si se busca HW decode |
-| **Sequoia** | ✅ con OCLP | 🟡 Posible con OCLP | Sí | Soporte OCLP confirmado, menor madurez que Sonoma | Alternativa viable |
-| **Monterey** | ✅ Nativo | ✅ Nativo | No | Última versión con drivers Haswell nativos | Baseline de control para verificar HW decode |
+| Escenario | SMBIOS | Soporte Metal | HW Decode | OCLP | Madurez | Valoración |
+|-----------|--------|:---:|:---:|:---:|---|---|
+| **Tahoe (actual)** | `MacPro7,1` | ✅ Nativo | ❌ | No | Configuración validada | Ideal si el decode por software es aceptable |
+| **Sonoma** | `iMac14,2` | ✅ con OCLP | 🟡 Posible con OCLP | Sí | Patching Legacy Metal maduro y estable | **Candidato principal** si se busca HW decode |
+| **Sequoia** | `iMac14,2` | ✅ con OCLP | 🟡 Posible con OCLP | Sí | Soporte OCLP confirmado, menor madurez que Sonoma | Alternativa viable |
+| **Monterey** | `iMac14,2` | ✅ Nativo | ✅ Nativo | No | Última versión con drivers Haswell nativos | Baseline de control para verificar HW decode |
 
 #### Sobre OCLP y Tahoe
 
