@@ -38,3 +38,4 @@ scripts/smbios_generated.json
 
 # Config backups
 *.backup_*
+EFI-Haswell-RX550-Lexa/extracted/
