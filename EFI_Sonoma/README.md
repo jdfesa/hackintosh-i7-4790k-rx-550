@@ -72,7 +72,7 @@ EFI adaptada desde `EFI_Tahoe` según la [guía Dortania para Desktop Haswell](h
 
 ## Próximo paso: Migrar a MacPro7,1
 
-La [EFI de referencia](../EFI-Haswell-RX550-Lexa/) con hardware casi idéntico (i5-4590 + RX 550 Lexa) funciona con **DRM y encoders** usando `MacPro7,1`. La hipótesis es que `MacPro7,1` (sin iGPU) fuerza a macOS a cargar AppleGVA con el path de decodificación AMD.
+La [EFI de referencia](../references/EFI-Haswell-RX550-Lexa/) con hardware casi idéntico (i5-4590 + RX 550 Lexa) funciona con **DRM y encoders** usando `MacPro7,1`. La hipótesis es que `MacPro7,1` (sin iGPU) fuerza a macOS a cargar AppleGVA con el path de decodificación AMD.
 
 Ver [TROUBLESHOOTING.md § Próximo paso](TROUBLESHOOTING.md#5-próximo-paso-migrar-a-macpro71) para el plan detallado.
 

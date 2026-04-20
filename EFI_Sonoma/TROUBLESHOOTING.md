@@ -118,7 +118,7 @@ boot-args: -v -x keepsyms=1 debug=0x100 ...
 
 ### Síntoma
 
-Tras agregar flags AMD (`shikigva=80 unfairgva=1 -radcodec`) inspirados en la [EFI de referencia](../EFI-Haswell-RX550-Lexa/), el sistema bootea correctamente pero:
+Tras agregar flags AMD (`shikigva=80 unfairgva=1 -radcodec`) inspirados en la [EFI de referencia](../references/EFI-Haswell-RX550-Lexa/), el sistema bootea correctamente pero:
 
 - `ioreg -l | grep -i "AppleGVA"` → **vacío** (framework no cargado)
 - `VDADecoderChecker` → "Hardware acceleration is fully supported" (falso positivo)
