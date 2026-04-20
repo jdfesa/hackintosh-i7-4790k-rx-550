@@ -29,3 +29,12 @@ Temporary Items
 __pycache__/
 *.py[cod]
 *$py.class
+
+# GenSMBIOS (cloned repo, download locally with scripts/generate_smbios.py)
+scripts/GenSMBIOS/
+
+# Generated SMBIOS data (contains private serials — do NOT commit)
+scripts/smbios_generated.json
+
+# Config backups
+*.backup_*
